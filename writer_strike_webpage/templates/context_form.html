@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}Context Form for "{{ story_title }}"{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.8.2/dist/paper.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Context for "{{ story_title }}"</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="work_type">Work Type:</label>
+            <select id="work_type" name="work_type">
+                <option value="">Select work type</option>
+                <option value="novel">Novel</option>
+                <option value="short_story">Short Story</option>
+                <option value="screenplay">Screenplay</option>
+                <option value="stage_play">Stage Play</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="genre">Genre:</label>
+            <select id="genre" name="genre">
+                <option value="">Select genre</option>
+                <option value="action">Action</option>
+                <option value="comedy">Comedy</option>
+                <option value="drama">Drama</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="horror">Horror</option>
+                <option value="mystery">Mystery</option>
+                <option value="romance">Romance</option>
+                <option value="sci-fi">Science Fiction</option>
+                <option value="thriller">Thriller</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="target_audience">Target Audience:</label>
+            <select id="target_audience" name="target_audience">
+                <option value="">Select target audience</option>
+                <option value="children">Children</option>
+                <option value="young_adult">Young Adult</option>
+                <option value="adult">Adult</option>
+                <option value="all_ages">All Ages</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="time_period">Time Period:</label>
+            <select id="time_period" name="time_period">
+                <option value="">Select time period</option>
+                <option value="ancient">Ancient</option>
+                <option value="medieval">Medieval</option>
+                <option value="renaissance">Renaissance</option>
+                <option value="industrial">Industrial Revolution</option>
+                <option value="modern">Modern</option>
+                <option value="future">Future</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="primary_language">Primary Language:</label>
+            <select id="primary_language" name="primary_language">
+                <option value="">Select primary language</option>
+                <option value="english">English</option>
+                <option value="spanish">Spanish</option>
+                <option value="french">French</option>
+                <option value="german">German</option>
+                <option value="chinese">Chinese</option>
+                <option value="japanese">Japanese</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="realism_level">Realism Level:</label>
+            <select id="realism_level" name="realism_level">
+                <option value="">Select realism level</option>
+                <option value="0">0 - Fantasy</option>
+                <option value="1">1 - Magical Realism</option>
+                <option value="2">2 - Realistic Fiction</option>
+                <option value="3">3 - Historical Fiction</option>
+                <option value="4">4 - Non-Fiction</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="additional_context">Additional Context:</label>
+            <textarea id="additional_context" name="additional_context" rows="4"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Context</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+<script>
+function submitForm() {
+    Swal.fire({
+        title: 'Submit Context?',
+        text: "Are you sure you want to submit this context?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, submit it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const form = document.getElementById('contextForm');
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Submitted!',
+                        text: 'Your context has been saved.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = data.redirect;
+                        }
+                    });
+                } else {
+                    Swal.fire(
+                        'Error!',
+                        data.error || 'There was a problem submitting your context.',
+                        'error'
+                    );
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire(
+                    'Error!',
+                    'There was a problem submitting your context.',
+                    'error'
+                );
+            });
+        }
+    });
+}
+</script>
+{% endblock %}
+

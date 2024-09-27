@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Feedback Submitted - WriterStrike{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="feedback-submitted">
+        <h1>Feedback Submitted Successfully</h1>
+        <p>Thank you for providing your feedback. What would you like to do next?</p>
+        <div class="button-group">
+            <a href="{{ url_for('progress', story_id=story_id) }}" class="btn btn-primary">Return to Progress</a>
+            <a href="{{ url_for('paste_scene', story_id=story_id) }}" class="btn btn-secondary">Paste Next Scene</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .container {
+        max-width: 800px;
+        margin: 100px auto;
+        text-align: center;
+    }
+    .feedback-submitted {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+    }
+    h1 {
+        color: #6c63ff;
+        font-size: 2.5em;
+        margin-bottom: 20px;
+    }
+    p {
+        font-size: 1.2em;
+        color: #333;
+        margin-bottom: 30px;
+    }
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 1.1em;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+    .btn-primary {
+        background-color: #6cc5d5;
+        color: white;
+    }
+    .btn-primary:hover {
+        background-color: #5145c7;
+    }
+    .btn-secondary {
+        background-color: #4CAF50;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #45a049;
+    }
+</style>
+{% endblock %}

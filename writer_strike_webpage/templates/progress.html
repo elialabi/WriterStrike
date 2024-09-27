@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Your Progress - WriterStrike{% endblock %}
+
+{% block extra_css %}
+<style>
+    .container {
+        max-width: 1000px;
+        margin: 100px auto;
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    .btn {
+        padding: 8px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        margin-right: 5px;
+    }
+    .btn-primary {
+        background-color: #4fc3f7; /* Light blue color */
+    }
+    .feedback-status {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .feedback-status .icon {
+        font-size: 24px;
+        margin-right: 5px;
+    }
+    .completed {
+        color: #28a745;
+    }
+    .not-completed {
+        color: #dc3545;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Progress for "{{ story.title }}"</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h2>Context</h2>
+    {% if story.context %}
+        <ul>
+            <li>Work Type: {{ story.context.work_type }}</li>
+            <li>Genre: {{ story.context.genre }}</li>
+            <li>Target Audience: {{ story.context.target_audience }}</li>
+            <li>Time Period: {{ story.context.time_period }}</li>
+            <li>Primary Language: {{ story.context.primary_language }}</li>
+            <li>Realism Level: {{ story.context.realism_level }}</li>
+            <li>Additional Context: {{ story.context.additional_context }}</li>
+        </ul>
+    {% else %}
+        <p>No context information available.</p>
+    {% endif %}
+
+    <h2>Scenes</h2>
+    {% if scenes %}
+        <ul>
+        {% for scene in scenes %}
+            <li>
+                Scene {{ loop.index }}
+                {% if scene.feedback %}
+                    (Feedback provided)
+                {% else %}
+                    <a href="{{ url_for('creative_feedback', scene_id=scene.scene_id) }}">Provide Feedback</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No scenes available.</p>
+    {% endif %}
+
+    <a href="{{ url_for('paste_scene', story_id=story.story_id) }}" class="btn btn-primary">Add New Scene</a>
+    <a href="{{ url_for('story_visualization', story_id=story.story_id) }}" class="btn btn-primary">View Story Visualization</a>
+    <a href="{{ url_for('feedback_overview', story_id=story.story_id) }}" class="btn btn-primary">View Feedback Overview</a>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Feedback Overview - WriterStrike{% endblock %}
+
+{% block extra_css %}
+<style>
+    .container {
+        max-width: 1000px;
+        margin: 100px auto;
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    .scene {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    .feedback-header {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Feedback Overview for Story ID: {{ story_id }}</h1>
+
+    {% if conversation_data %}
+        {% for scene in conversation_data %}
+            <div class="scene">
+                <strong>Scene {{ scene.scene_id }}:</strong>
+                <p>{{ scene.scene_text }}</p>
+                <strong>Analysis Result:</strong>
+                <pre>{{ scene.analysis_result | tojson(indent=2) }}</pre> <!-- Display analysis result as JSON -->
+
+                <!-- Creative Feedback Section -->
+                <div class="feedback-header">Creative Feedback:</div>
+                {% if scene.creative_feedback %}
+                    <ul>
+                        <li><strong>Impact on Narrative Flow:</strong> {{ scene.creative_feedback.impact_on_narrative_flow }}</li>
+                        <li><strong>Impact on Emotional Depth:</strong> {{ scene.creative_feedback.impact_on_emotional_depth }}</li>
+                        <li><strong>Impact on Dialogue:</strong> {{ scene.creative_feedback.impact_on_dialogue }}</li>
+                        <li><strong>Impact on Character Development:</strong> {{ scene.creative_feedback.impact_on_character_development }}</li>
+                        <li><strong>Overall Creative Feedback:</strong> {{ scene.creative_feedback.overall_creative_feedback }}</li>
+                        <li><strong>Suggestion:</strong> {{ scene.creative_feedback.suggestion }}</li>
+                    </ul>
+                {% else %}
+                    <p>No creative feedback available.</p>
+                {% endif %}
+
+                <!-- Factual Inaccuracies Section -->
+                <div class="feedback-header">Factual Inaccuracies:</div>
+                {% if scene.analysis_result %}
+                    <pre>{{ scene.analysis_result | tojson(indent=2) }}</pre>
+                {% else %}
+                    <p>No factual inaccuracies available.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No conversation data available.</p>
+    {% endif %}
+</div>
+{% endblock %}

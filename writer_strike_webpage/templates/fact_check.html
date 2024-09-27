@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fact Check Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container-lg margin-top-large">
+        <article class="article shadow">
+            <h1 class="article-title">Fact Check Results</h1>
+            <div class="row flex-spaces">
+                <div class="col-8 col">
+                    <h4>Your Script</h4>
+                    <div id="script-content" class="border padding">
+                        <p>{{ scene }}</p>
+                    </div>
+                </div>
+
+                <div class="col-4 col shadow border padding">
+                    <h4 class="text-danger">Inaccuracy Summary</h4>
+                    <div class="inaccuracy-summary">
+                        <ol>
+                            {% for category, inaccuracy in result.items() %}
+                            <li class="alert {% if inaccuracy.strip() == 'None observed.' %}alert-success{% else %}alert-danger{% endif %}">
+                                <button class="btn-close" onclick="this.parentElement.style.display='none';">&times;</button>
+                                <div class="alert-content">
+                                    <strong>{{ category }} Inaccuracy:</strong> {{ inaccuracy }}
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ url_for('analyze_scene', scene_id=scene_id) }}">
+                <input type="hidden" name="story_id" value="{{ story_id }}">
+                <textarea name="revised_scene" rows="10" cols="50">{{ scene }}</textarea>
+                <button type="submit" name="revise_scene" value="1">Revise Scene</button>
+            </form>
+
+            <a href="{{ url_for('creative_feedback', scene_id=scene_id, story_id=story_id) }}" class="btn-primary">Provide Creative Feedback</a>
+            <a href="{{ url_for('paste_scene', story_id=story_id) }}" class="btn-secondary">Next Scene</a>
+        </article>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeButton = document.createElement('button');
+            darkModeButton.innerText = 'Toggle Dark Mode';
+            darkModeButton.className = 'btn-secondary';
+            darkModeButton.style.position = 'fixed';
+            darkModeButton.style.bottom = '20px';
+            darkModeButton.style.right = '20px';
+            darkModeButton.onclick = toggleDarkMode;
+            document.body.appendChild(darkModeButton);
+        });
+    </script>
+</body>
+</html>

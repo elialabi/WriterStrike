@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}WriterStrike - Your AI-powered Script Fact-Checker{% endblock %}
+
+{% block extra_css %}
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+    }
+
+    .background-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("{{ url_for('static', filename='images/Untitled design.gif') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: -1;
+    }
+
+    .content-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 0.7);
+    }
+
+    .site-title {
+        font-size: 4em;
+        color: #6c63ff;
+        margin-bottom: 40px;
+        text-decoration: none;
+        border-bottom: none;
+        position: relative;
+    }
+
+    .site-title::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -10px;
+        width: 0;
+        height: 4px;
+        background-color: #6c63ff;
+        transition: width 0.5s ease;
+    }
+
+    .site-title.typed::after {
+        width: 100%;
+    }
+
+    .typed-cursor {
+        font-size: 4em;
+        color: #6c63ff;
+    }
+
+    .btn {
+        padding: 15px 30px;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin: 10px;
+        font-weight: bold;
+        transition: opacity 0.3s;
+    }
+
+    .btn:hover {
+        opacity: 0.8;
+    }
+
+    .btn-primary {
+        background-color: #87CEFA; /* Light blue */
+    }
+
+    .btn-secondary {
+        background-color: #4CAF50; /* Green */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="background-container"></div>
+<div class="content-container">
+    <h1 class="site-title"><span id="typed-text"></span></h1>
+    <div>
+        <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+        <a href="{{ url_for('register') }}" class="btn btn-secondary">Register</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var typed = new Typed('#typed-text', {
+            strings: ['WriterStrike'],
+            typeSpeed: 80,
+            backSpeed: 50,
+            loop: false,
+            showCursor: false,  // Changed this to false
+            onComplete: function(self) {
+                document.querySelector('.site-title').classList.add('typed');
+            }
+        });
+    });
+</script>
+{% endblock %}

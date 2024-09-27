@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Paste Scene - WriterStrike{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Paste Your Scene</h1>
+    <form id="pasteSceneForm" method="POST" action="{{ url_for('paste_scene', story_id=story_id) }}">
+        <div class="form-group">
+            <label for="scene_text">Scene Text:</label>
+            <textarea id="scene_text" name="scene_text" rows="20" cols="80" class="large-textarea" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Submit Scene</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('pasteSceneForm').addEventListener('submit', function(event) {
+        showLoading();
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-image: url('/static/images/lined-paper.webp'); /* Path to your lined paper image */
+        background-size: cover; /* Cover the entire background */
+        background-repeat: no-repeat; /* Prevent repeating the image */
+        background-attachment: fixed; /* Keep the background fixed during scrolling */
+    }
+
+    .container {
+        background-color: rgba(255, 255, 255, 0.8); /* White background with some transparency */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .large-textarea {
+        width: 100%;
+        min-height: 400px;
+        padding: 10px;
+        font-size: 16px;
+        line-height: 1.5;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+    }
+</style>
+{% endblock %}
